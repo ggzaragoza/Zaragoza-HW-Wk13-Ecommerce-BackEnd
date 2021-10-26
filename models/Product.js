@@ -1,7 +1,7 @@
 // import important parts of sequelize library
 const { Model, DataTypes } = require('sequelize');
 // import our database connection from config.js
-const sequelize = require('../config/connection');
+const sequelize = require('../config/connection.js');
 
 // Initialize Product model (table) by extending off Sequelize's Model class
 class Product extends Model {}
@@ -10,28 +10,37 @@ class Product extends Model {}
 Product.init(
   {
     // define columns
-    book_id: {
+    id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    title: {
-      type: DataTypes.STRING
+    product_name: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    author: {
-      type: DataTypes.STRING
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      validate: {
+        isDecimal: true,
+      },
     },
-    isbn: {
-      type: DataTypes.STRING
+    stock: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 10,
+      validate: {
+        isNumeric: true,
+      },
     },
-    pages: {
-      type: DataTypes.INTEGER
-    },
-    edition: {
-      type: DataTypes.INTEGER
-    },
-    is_paperback: {
-      type: DataTypes.BOOLEAN
+    category_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'category',
+        key: 'id',
+      },
     }
   },
   {
